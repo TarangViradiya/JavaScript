@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        //1
+        function sum(a, b) {
+            return a + b;
+        }
+        // 2
+        function rectangleArea(length, width) {
+            return length * width;
+        }
+        // 3
+        function concatenateStrings(str1, str2) {
+            return str1 + str2;
+        }
+        // 4
+        function squareArea(side) {
+            return side * side;
+        }
+        // 5
+        function stringLength(str) {
+            return str.length;
+        }
+        // 6
+        function hasAAtEnds(str) {
+            return str.startsWith('A') || str.endsWith('A');
+        }
+        // 7
+        function celsiusToFahrenheit(celsius) {
+            return (celsius * 9 / 5) + 32;
+        }
+        // 8
+        const productOfDigits = function (num) {
+            return num.toString().split('').reduce((product, digit) => product * Number(digit), 1);
+        };
+        // 9
+        function sumOfThreeNumbers(a, b, c) {
+            return a + b + c;
+        }
+        // 10
+        const factorial = (n) => {
+            if (n === 0) return 1;
+            return n * factorial(n - 1);
+        };
+        // 11
+        const double = (num) => num * 2;
+        // 12
+        function isOdd(num) {
+            return num % 2 !== 0;
+        }
+        // 13
+        const darkMode = true;
+        console.log(darkMode ? "ON" : "OFF");
+        
+    </script>
+</body>
+
+</html>
