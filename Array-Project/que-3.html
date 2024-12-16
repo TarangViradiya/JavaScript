@@ -1,0 +1,71 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>
+       rs.
+    </h1>
+</body>
+
+</html>
+<script>
+    // let arr = [2,4,5,7,9,4,8,3]
+
+    // let filter = arr.filter((el,i)=> el !== 0)
+
+    // console.log(filter)
+
+    // let reduce = arr.reduce((sum,el)=>{
+    //     return sum * el 
+    // },1)
+
+    // console.log(reduce)
+
+    // Example array of numbers
+    const numbers = [1, 2, 3, 4, 5];
+
+    // Use reduce to find the product of all numbers
+    // const product = numbers.reduce((accumulator, currentValue) => accumulator * currentValue, 1);
+
+    // console.log(product); // Output: 120
+
+
+    const filteredNumbers = numbers.filter(num => num !== 0);  // Filter out 0s
+    const product = filteredNumbers.reduce((acc, num) => acc * num, 1);
+
+    console.log(product); // Output will be 120 if there were zeros in the original array
+
+</script> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1> Q3.Use filter and reduce to find products of all numbe</h1>
+</body>
+</html>
+<script>
+    let arr = [1,2,3,4,5]
+
+    let arrfilter = arr.filter((el,i)=>{
+        if(el !== 0){
+            return el
+        }
+    })
+
+    let arrreduce = arrfilter.reduce((sum,el)=>{
+        return sum * el
+    },1)
+
+    console.log(arrreduce)
+</script>
