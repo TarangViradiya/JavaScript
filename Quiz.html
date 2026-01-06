@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>QuizEra | Quiz</title>
+    <link rel="icon" href="images/Logo-white.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        @font-face {
+            font-family: 'ComicRelif-Bold';
+            src: url(fonts/Comic_Relief/ComicRelief-Bold.ttf);
+        }
+
+        @font-face {
+            font-family: 'ComicRelif-Reg';
+            src: url(fonts/Comic_Relief/ComicRelief-Regular.ttf);
+        }
+
+        /* ---------- BASE ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        html,
+        body {
+            height: 100%;
+            background: #0a0a0a;
+            color: #fff;
+        }
+
+        /* ---------- CANVAS ---------- */
+        #space {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        nav,
+        main,
+        section {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ---------- NAVBAR ---------- */
+        nav {
+            background: rgba(0, 0, 0, 0.35);
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+
+        nav h1 {
+            font-size: 24px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        nav ul li:hover {
+            color: #ffd369;
+            cursor: pointer;
+        }
+
+        /* ---------- QUIZ CARD ---------- */
+        section {
+            max-width: 600px;
+            margin: 80px auto;
+            background: rgba(255, 255, 255, 0.033);
+            backdrop-filter: blur(2px);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        #question {
+            font-size: 26px;
+            margin-bottom: 30px;
+        }
+
+        /* ---------- OPTIONS ---------- */
+        .option {
+            width: 100%;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            color: #fff;
+            background: linear-gradient(135deg, #6a85f128, #8053ac8d);
+            transition: 0.3s;
+        }
+
+        .option:hover {
+            transform: translateX(6px);
+            background: linear-gradient(135deg, #eadcbd, #f3f2ef);
+            color: #000;
+        }
+
+        .correct {
+            background: #2ecc71 !important;
+        }
+
+        .wrong {
+            background: #e74c3c !important;
+        }
+
+        /* ---------- NAV BUTTONS ---------- */
+        .nav-btns {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .nav-btns button {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 20px;
+            background: #ffd269a5;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #result {
+            margin-top: 25px;
+            font-size: 20px;
+            color: #ffd369;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- PARTICLE BACKGROUND -->
+    <canvas id="space"></canvas>
+
+    <!-- NAVBAR -->
+    <nav>
+        <h1 style="font-family: ComicRelif-Bold;">QuizEra</h1>
+        <ul>
+            <li>Home</li>
+            <li>Quizzes</li>
+            <li>About</li>
+            <li>Contact</li>
+        </ul>
+    </nav>
+
+    <!-- QUIZ -->
+    <section>
+        <h2 style="font-family: ComicRelif-Bold; font-size: 32px;" id="question"></h2>
+
+        <button style="font-family: ComicRelif-Reg;" class="option"></button>
+        <button style="font-family: ComicRelif-Reg;" class="option"></button>
+        <button style="font-family: ComicRelif-Reg;" class="option"></button>
+        <button style="font-family: ComicRelif-Reg;" class="option"></button>
+
+        <div class="nav-btns">
+            <button id="previous">Previous</button>
+            <button id="next">Next</button>
+        </div>
+
+        <p id="result"></p>
+    </section>
+
+    <!-- ================= PARTICLE JS (UI ONLY) ================= -->
+    <script>
+        const canvas = document.getElementById("space");
+        const ctx = canvas.getContext("2d");
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resize();
+        window.onresize = resize;
+
+        const particles = Array.from({ length: 120 }, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 2 + 1,
+            s: Math.random() * 0.6 + 0.2
+        }));
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.y -= p.s;
+                if (p.y < 0) p.y = canvas.height;
+                ctx.beginPath();
+                ctx.fillStyle = "rgba(255,200,120,0.8)";
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+
+
+</body>
+
+</html>
+<script>
+
+
+    // const htmlQuestions = [
+    //     {
+    //         question: "What does HTML stand for?",
+    //         options: [
+    //             "Hyper Text Markup Language",
+    //             "High Text Machine Language",
+    //             "Hyperlinks and Text Markup Language",
+    //             "Home Tool Markup Language"
+    //         ],
+    //         correctAnswer: 0
+    //     },
+    //     {
+    //         question: "Which tag is used to create a hyperlink in HTML?",
+    //         options: [
+    //             '<link>',
+    //             '<a>',
+    //             '<href>',
+    //             '<url>'
+    //         ],
+    //         correctAnswer: 1
+    //     },
+    //     {
+    //         question: "Which HTML tag is used to display an image?",
+    //         options: [
+    //             '<image>',
+    //             '<img>',
+    //             '<pic>',
+    //             '<src>'
+    //         ],
+    //         correctAnswer: 1
+    //     },
+    //     {
+    //         question: "Which tag is used for the largest heading in HTML?",
+    //         options: [
+    //             '<h6>',
+    //             '<head>',
+    //             '<h1>',
+    //             '<heading>'
+    //         ],
+    //         correctAnswer: 2
+    //     },
+    //     {
+    //         question: "Which attribute is used to provide alternate text for an image?",
+    //         options: [
+    //             "title",
+    //             "src",
+    //             "alt",
+    //             "href"
+    //         ],
+    //         correctAnswer: 2
+    //     }
+    // ]
+    const quizQuestions = {
+        html: [
+            {
+                question: "What does HTML stand for?",
+                options: ["Hyper Text Markup Language", "High Text Markup Language", "Hyperlinks and Text Markup Language", "Home Tool Markup Language"],
+                answer: "Hyper Text Markup Language"
+            },
+            {
+                question: "Which HTML tag is used for the largest heading?",
+                options: ["<h6>", "<heading>", "<h1>", "<head>"],
+                answer: "<h1>"
+            },
+            {
+                question: "What is the correct HTML element for inserting a line break?",
+                options: ["<break>", "<lb>", "<br>", "<line>"],
+                answer: "<br>"
+            },
+            {
+                question: "Which attribute is used to provide an alternate text for an image?",
+                options: ["title", "alt", "src", "longdesc"],
+                answer: "alt"
+            },
+            {
+                question: "Which tag is used to create a hyperlink?",
+                options: ["<link>", "<a>", "<href>", "<url>"],
+                answer: "<a>"
+            },
+            {
+                question: "What is the root element of an HTML document?",
+                options: ["<body>", "<html>", "<head>", "<title>"],
+                answer: "<html>"
+            },
+            {
+                question: "Which tag is used to define a table row?",
+                options: ["<tr>", "<td>", "<table>", "<row>"],
+                answer: "<tr>"
+            },
+            {
+                question: "How can you comment in HTML?",
+                options: ["// comment", "/* comment */", "<!-- comment -->", "# comment"],
+                answer: "<!-- comment -->"
+            },
+            {
+                question: "Which element is used for the document's main heading in HTML5?",
+                options: ["<h1>", "<header>", "<main>", "<title>"],
+                answer: "<h1>"
+            },
+            {
+                question: "Which tag is used to embed JavaScript in HTML?",
+                options: ["<js>", "<script>", "<javascript>", "<code>"],
+                answer: "<script>"
+            }
+        ],
+
+        css: [
+            {
+                question: "What does CSS stand for?",
+                options: ["Computer Style Sheets", "Creative Style Sheets", "Cascading Style Sheets", "Colorful Style Sheets"],
+                answer: "Cascading Style Sheets"
+            },
+            {
+                question: "Which property is used to change text color in CSS?",
+                options: ["font-color", "text-color", "color", "font-style"],
+                answer: "color"
+            },
+            {
+                question: "How do you select an element with id 'header' in CSS?",
+                options: ["#header", ".header", "header", "*header"],
+                answer: "#header"
+            },
+            {
+                question: "Which property is used to change the background color?",
+                options: ["bgcolor", "background-color", "color", "background"],
+                answer: "background-color"
+            },
+            {
+                question: "How do you make text bold in CSS?",
+                options: ["font-weight: bold;", "text-style: bold;", "font-style: bold;", "text-weight: bold;"],
+                answer: "font-weight: bold;"
+            },
+            {
+                question: "Which CSS property controls the element's size?",
+                options: ["width and height", "size", "length", "dimension"],
+                answer: "width and height"
+            },
+            {
+                question: "How do you apply a style to all <p> elements?",
+                options: ["p { }", ".p { }", "#p { }", "all.p { }"],
+                answer: "p { }"
+            },
+            {
+                question: "Which property is used for rounded corners?",
+                options: ["corner-radius", "border-radius", "border-corner", "radius"],
+                answer: "border-radius"
+            },
+            {
+                question: "Which property is used to control element visibility?",
+                options: ["visible", "display", "opacity", "visibility"],
+                answer: "visibility"
+            },
+            {
+                question: "How do you add a shadow to text in CSS?",
+                options: ["text-shadow", "font-shadow", "shadow-text", "text-effect"],
+                answer: "text-shadow"
+            }
+        ],
+
+        js: [
+            {
+                question: "Which symbol is used for comments in JavaScript?",
+                options: ["//", "/* */", "#", "<!-- -->"],
+                answer: "//"
+            },
+            {
+                question: "Which method is used to log output in JavaScript?",
+                options: ["console.print()", "console.write()", "console.log()", "print()"],
+                answer: "console.log()"
+            },
+            {
+                question: "Which keyword is used to declare a variable in JS?",
+                options: ["var", "let", "const", "All of the above"],
+                answer: "All of the above"
+            },
+            {
+                question: "Which operator is used for strict equality?",
+                options: ["==", "=", "===", "!="],
+                answer: "==="
+            },
+            {
+                question: "Which method converts JSON to a JavaScript object?",
+                options: ["JSON.stringify()", "JSON.parse()", "JSON.object()", "JSON.convert()"],
+                answer: "JSON.parse()"
+            },
+            {
+                question: "Which event occurs when a user clicks an element?",
+                options: ["onmouse", "onclick", "onchange", "onhover"],
+                answer: "onclick"
+            },
+            {
+                question: "Which function is used to delay code execution in JS?",
+                options: ["setTimeout()", "setInterval()", "delay()", "wait()"],
+                answer: "setTimeout()"
+            },
+            {
+                question: "Which of the following is not a JS data type?",
+                options: ["Number", "String", "Boolean", "Character"],
+                answer: "Character"
+            },
+            {
+                question: "What will 'typeof null' return?",
+                options: ["null", "object", "undefined", "number"],
+                answer: "object"
+            },
+            {
+                question: "Which loop runs at least once even if the condition is false?",
+                options: ["for", "while", "do...while", "foreach"],
+                answer: "do...while"
+            }
+        ],
+
+        react: [
+            {
+                question: "Who developed React?",
+                options: ["Google", "Facebook", "Microsoft", "Twitter"],
+                answer: "Facebook"
+            },
+            {
+                question: "What is the syntax extension used in React?",
+                options: ["JSX", "HTML", "XML", "ReactScript"],
+                answer: "JSX"
+            },
+            {
+                question: "Which hook is used to manage state in functional components?",
+                options: ["useEffect", "useState", "useContext", "useReducer"],
+                answer: "useState"
+            },
+            {
+                question: "Which method is used to render a React component in the DOM?",
+                options: ["React.render()", "ReactDOM.render()", "render()", "ReactDOM.mount()"],
+                answer: "ReactDOM.render()"
+            },
+            {
+                question: "What is the purpose of 'props' in React?",
+                options: ["To store local state", "To pass data from parent to child", "To fetch API data", "To manage lifecycle"],
+                answer: "To pass data from parent to child"
+            },
+            {
+                question: "Which hook is used to perform side effects in React?",
+                options: ["useState", "useEffect", "useReducer", "useCallback"],
+                answer: "useEffect"
+            },
+            {
+                question: "Which of the following is a class component lifecycle method?",
+                options: ["componentDidMount", "useEffect", "useState", "renderState"],
+                answer: "componentDidMount"
+            },
+            {
+                question: "How do you create a React component as a function?",
+                options: ["function MyComponent() {}", "const MyComponent = () => {}", "Both of the above", "None of the above"],
+                answer: "Both of the above"
+            },
+            {
+                question: "Which attribute is used to add a unique key to list items in React?",
+                options: ["id", "key", "ref", "name"],
+                answer: "key"
+            },
+            {
+                question: "How do you conditionally render elements in React?",
+                options: ["if-else in JSX", "ternary operator", "logical && operator", "All of the above"],
+                answer: "All of the above"
+            }
+        ]
+    };
+
+
+
+    let param = new URLSearchParams(window.location.search)
+    let subject = param.get('subject')
+
+    let CurrentQuestion = []
+
+    let index = 0
+    let score = 0
+
+
+    const ques = document.getElementById("question")
+    const opt = document.querySelectorAll(".option")
+    const res = document.getElementById("result")
+
+    const previous = document.getElementById("previous")
+    const next = document.getElementById("next")
+
+
+    function SelectedTopic(subject) {
+        
+        if (quizQuestions[subject]) {
+            CurrentQuestion = quizQuestions[subject]
+        } else {
+            alert("Something Went wrong !! ")
+            window.location.href = "index.html"
+        }
+    }
+
+    SelectedTopic(subject)
+
+    function loadQuiz() {
+        let currentQue = CurrentQuestion[index]
+
+        ques.innerHTML = currentQue.question
+
+        opt.forEach((btn, i) => {
+
+            btn.textContent = currentQue.options[i] // Here .innerHTML does not support
+
+            btn.onclick = () => checkAnswer(currentQue.options[i])
+        })
+
+        previous.disabled = index === 0;
+        next.disabled = index === CurrentQuestion.length - 1;
+
+    }
+
+
+    previous.onclick = () => {
+
+        if (index > 0) {
+            index--
+            loadQuiz()
+        }
+    }
+
+    next.onclick = () => {
+
+        if (index < CurrentQuestion.length - 1) {
+
+            index++
+            loadQuiz()
+        }
+    }
+
+    function checkAnswer(value) {
+        if (value === CurrentQuestion[index].answer) {
+            score++
+        }
+        // index++
+
+        if (index < CurrentQuestion.length - 1) {
+            index++
+            loadQuiz()
+        }
+        else {
+            ques.innerHTML = "Your Quiz is completed...🎉"
+            res.innerHTML = "Your Score : " + `${score} / ${CurrentQuestion.length}`
+
+            previous.style.display = "none"
+            next.style.display = "none"
+
+            opt.forEach((btn) => { // Here btn is for common property for all the <option>
+
+                btn.style.display = "none"
+            })
+        }
+    }
+
+    loadQuiz()
+
+</script>
+<!-- <script>
+    const htmlQuestions = [
+        {
+            question: "What does HTML stand for?",
+            options: [
+                "Hyper Text Markup Language",
+                "High Text Machine Language",
+                "Hyperlinks and Text Markup Language",
+                "Home Tool Markup Language"
+            ],
+            correctAnswer: 0
+        },
+        {
+            question: "Which tag is used to create a hyperlink in HTML?",
+            options: ["<link>", "<a>", "<href>", "<url>"],
+            correctAnswer: 1
+        },
+        {
+            question: "Which HTML tag is used to display an image?",
+            options: ["<image>", "<img>", "<pic>", "<src>"],
+            correctAnswer: 1
+        },
+        {
+            question: "Which tag is used for the largest heading in HTML?",
+            options: ["<h6>", "<head>", "<h1>", "<heading>"],
+            correctAnswer: 2
+        },
+        {
+            question: "Which attribute is used to provide alternate text for an image?",
+            options: ["title", "src", "alt", "href"],
+            correctAnswer: 2
+        }
+    ];
+
+    let index = 0;
+    let userAnswers = new Array(htmlQuestions.length).fill(null);
+
+    const ques = document.getElementById("question");
+    const opt = document.querySelectorAll(".option");
+    const previous = document.getElementById("previous");
+    const next = document.getElementById("next");
+    const res = document.getElementById("result");
+
+    function loadQuiz() {
+        const current = htmlQuestions[index];
+        ques.innerText = current.question;
+
+        opt.forEach((btn, i) => {
+            btn.innerText = current.options[i];
+            btn.classList.remove("selected");
+
+            if (userAnswers[index] === i) {
+                btn.classList.add("selected");
+            }
+
+            btn.onclick = () => selectAnswer(i);
+        });
+
+        previous.disabled = index === 0;
+        next.disabled = index === htmlQuestions.length - 1;
+    }
+
+    function selectAnswer(i) {
+        userAnswers[index] = i;
+
+        if (index < htmlQuestions.length - 1) {
+            index++;
+            loadQuiz();
+        } else {
+            showResult();
+        }
+    }
+
+    previous.onclick = () => {
+        if (index > 0) {
+            index--;
+            loadQuiz();
+        }
+    };
+
+    next.onclick = () => {
+        if (index < htmlQuestions.length - 1) {
+            index++;
+            loadQuiz();
+        }
+    };
+
+    function showResult() {
+        let score = 0;
+
+        userAnswers.forEach((ans, i) => {
+            if (ans === htmlQuestions[i].correctAnswer) {
+                score++;
+            }
+        });
+
+        ques.innerText = "Quiz Completed 🎉";
+        res.innerText = `Your Score: ${score} / ${htmlQuestions.length}`;
+
+        opt.forEach(btn => btn.style.display = "none");
+        previous.style.display = "none";
+        next.style.display = "none";
+    }
+
+    loadQuiz();
+</script> -->
+
+<!-- s -->

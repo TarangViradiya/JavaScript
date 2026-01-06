@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>QuizEra</title>
+    <link rel="icon" href="images/Logo-white.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        @font-face {
+            font-family: 'ComicRelif-Bold';
+            src: url(fonts/Comic_Relief/ComicRelief-Bold.ttf);
+        }
+
+        @font-face {
+            font-family: 'ComicRelif-Reg';
+            src: url(fonts/Comic_Relief/ComicRelief-Regular.ttf);
+        }
+
+        /* ---------- BASE ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        html,
+        body {
+            height: 100%;
+            background: #0a0a0a;
+        }
+
+        /* ---------- CANVAS ---------- */
+        #space {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            /* 🔥 MOST IMPORTANT FIX */
+        }
+
+        /* ---------- CONTENT ---------- */
+        body {
+            color: #fff;
+            position: relative;
+        }
+
+        nav,
+        main {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ---------- NAVBAR ---------- */
+        nav {
+            background: rgba(0, 0, 0, 0.35);
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(3px);
+        }
+
+        nav h1 {
+            font-size: 24px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        nav ul li:hover {
+            color: #ffd369;
+            cursor: pointer;
+        }
+
+        /* ---------- MAIN ---------- */
+        main {
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        main h2 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        main p {
+            margin-bottom: 40px;
+            font-size: 18px;
+        }
+
+        /* ---------- SUBJECT CARDS ---------- */
+        .subjects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            max-width: 1000px;
+            margin: auto;
+
+        }
+
+        .card-btn {
+            background: linear-gradient(145deg, #ffffff07, #ffffff11);
+            border: none;
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(2px);
+            color: #fff;
+            cursor: pointer;
+            transition: 0.4s;
+        }
+
+        .card-btn:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-btn h3 {
+            margin-top: 15px;
+            font-size: 22px;
+        }
+
+        /* ---------- MOBILE ---------- */
+        @media (max-width:600px) {
+            nav {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            main h2 {
+                font-size: 28px;
+            }
+        }
+
+      
+    </style>
+</head>
+
+<body>
+
+    <!-- 🔥 PARTICLE CANVAS -->
+    <canvas id="space"></canvas>
+
+    <!-- NAVBAR -->
+    <nav>
+
+        <h1 style="font-family: ComicRelif-Bold;">QuizEra</h1>
+        <ul>
+            <li>Home</li>
+            <li>Quizzes</li>
+            <li>About</li>
+            <li>Contact</li>
+        </ul>
+    </nav>
+
+    <!-- MAIN -->
+    <main>
+        <br><br>
+        <h2 style="font-family: ComicRelif-Bold; font-size: 50px;">Select Your Subject 🎯</h2>
+        <p style="font-family: ComicRelif-Reg; ">Click on any one topic to start the Quiz</p>
+        <br><br>
+        <div class="subjects">
+            <button class="card-btn" onclick="SelectSubject('html')">
+                <img src="images/html.png" height="120">
+                <h3>HTML</h3>
+            </button>
+
+            <button class="card-btn" onclick="SelectSubject('css')">
+                <img src="images/css.png" height="120">
+                <h3>CSS</h3>
+            </button>
+
+            <button class="card-btn" onclick="SelectSubject('js')">
+                <img src="images/js.png" height="120">
+                <h3>JavaScript</h3>
+            </button>
+
+            <button class="card-btn" onclick="SelectSubject('react')">
+                <img src="images/react.png" height="120">
+                <h3>React Js</h3>
+            </button>
+        </div>
+    </main>
+
+    <!-- ---------- PARTICLE JS (FROM CODEPEN) ---------- -->
+    <script>
+        const canvas = document.getElementById("space");
+        const ctx = canvas.getContext("2d");
+
+        let w, h, dpr;
+
+        function resize() {
+            dpr = window.devicePixelRatio || 1;
+            w = window.innerWidth;
+            h = window.innerHeight;
+            canvas.width = w * dpr;
+            canvas.height = h * dpr;
+            canvas.style.width = w + "px";
+            canvas.style.height = h + "px";
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.scale(dpr, dpr);
+        }
+        resize();
+        window.addEventListener("resize", resize);
+
+        const particles = [];
+        const count = 120;
+
+        function createParticle() {
+            return {
+                x: Math.random() * w,
+                y: Math.random() * h,
+                size: Math.random() * 2 + 1,
+                speed: Math.random() * 0.6 + 0.2,
+                drift: (Math.random() - 0.5) * 0.5,
+                glow: Math.random() * 0.3 + 0.7,
+                hue: Math.random() * 40 + 20,
+                phase: Math.random() * Math.PI * 2
+            };
+        }
+
+        for (let i = 0; i < count; i++) particles.push(createParticle());
+
+        let mouse = { x: w / 2, y: h / 2 };
+        window.addEventListener("mousemove", e => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const time = Date.now();
+
+            particles.forEach((p1, i) => {
+                particles.slice(i + 1).forEach(p2 => {
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 80) {
+                        ctx.strokeStyle = `rgba(255,200,120,${(1 - dist / 80) * 0.2})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                });
+            });
+
+            ctx.shadowBlur = 12;
+            ctx.shadowColor = "rgba(255,200,120,0.7)";
+
+            particles.forEach(p => {
+                p.y -= p.speed;
+                if (p.y < -10) p.y = h + 10;
+
+                const pulse = p.size + Math.sin(time * 0.003 + p.phase) * 0.3;
+                ctx.beginPath();
+                ctx.fillStyle = `hsla(${p.hue},100%,70%,${p.glow})`;
+                ctx.arc(p.x, p.y, pulse, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            requestAnimationFrame(draw);
+        }
+        draw();
+
+
+    </script>
+
+</body>
+
+</html>
+<script>
+
+    function SelectSubject(val) {
+        alert("You Selected : " + val);
+        window.location.href = `Quiz.html?subject=${encodeURIComponent(val)}`;
+    }
+</script>
