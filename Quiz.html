@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>QuizEra | Quiz</title>
+    <link rel="icon" href="images/Logo-white.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        @font-face {
+            font-family: 'ComicRelif-Bold';
+            src: url(fonts/Comic_Relief/ComicRelief-Bold.ttf);
+        }
+
+        @font-face {
+            font-family: 'ComicRelif-Reg';
+            src: url(fonts/Comic_Relief/ComicRelief-Regular.ttf);
+        }
+
+        /* ---------- BASE ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        html,
+        body {
+            height: 100%;
+            background: #0a0a0a;
+            color: #fff;
+        }
+
+        /* ---------- CANVAS ---------- */
+        #space {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        nav,
+        main,
+        section {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ---------- NAVBAR ---------- */
+        nav {
+            background: rgba(0, 0, 0, 0.35);
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+
+        nav h1 {
+            font-size: 24px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        nav ul li:hover {
+            color: #ffd369;
+            cursor: pointer;
+        }
+
+        /* ---------- QUIZ CARD ---------- */
+        section {
+            max-width: 600px;
+            margin: 80px auto;
+            background: rgba(255, 255, 255, 0.033);
+            backdrop-filter: blur(2px);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        #question {
+            font-size: 26px;
+            margin-bottom: 30px;
+        }
+
+        /* ---------- OPTIONS ---------- */
+        .option {
+            width: 100%;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            color: #fff;
+            background: linear-gradient(135deg, #6a85f128, #8053ac8d);
+            transition: 0.3s;
+        }
+
+        .option:hover {
+            transform: translateX(6px);
+            background: linear-gradient(135deg, #eadcbd, #f3f2ef);
+            color: #000;
+        }
+
+        .correct {
+            background: #2ecc71 !important;
+        }
+
+        .wrong {
+            background: #e74c3c !important;
+        }
+
+        /* ---------- NAV BUTTONS ---------- */
+        .nav-btns {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .nav-btns button {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 20px;
+            background: #ffd269a5;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #result {
+            margin-top: 25px;
+            font-size: 20px;
+            color: #ffd369;
+        }
+
+        .back-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 12px;
+            background: linear-gradient(135deg, #ffd369, #ffb703);
+            color: #000;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 30px rgba(255, 211, 105, 0.5);
+        }
+
+        .none {
+            display: none;
+        }
+
+        .timer {
+            background: #AB8E4A;
+            color: #000;
+            padding-inline: 9px;
+            padding-block: 5px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- PARTICLE BACKGROUND -->
+    <canvas id="space"></canvas>
+
+    <!-- NAVBAR -->
+    <nav>
+        <h1 style="font-family: ComicRelif-Bold;">QuizEra</h1>
+        <ul>
+            <li>Home</li>
+            <li>Quizzes</li>
+            <li>About</li>
+            <li>Contact</li>
+        </ul>
+    </nav>
+
+    <!-- CountDown -->
+    <div id="countdown-container" style="
+    position:fixed;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#0a0a0a;
+    color:#ffd369;
+    font-family: ComicRelif-Bold;
+    font-size:100px;
+    z-index:5;
+    flex-direction:column;
+">
+        <div id="count-number">5</div>
+        <div id="click-text" style="font-size:30px; margin-top:20px;">Click to Start Quiz</div>
+    </div>
+    <!-- CountDown -->
+
+
+    <!-- QUIZ -->
+    <section class="section">
+        <div id="timer-div" style="margin-bottom: 12px; width: 100%;height: 30px;display: flex;justify-content: end;align-items: center;">
+            <p class="timer" id="timer"></p>
+        </div>
+        <h2 style="font-family: ComicRelif-Bold; font-size: 32px;" id="question"></h2>
+
+        <button style="font-family: ComicRelif-Reg;" class="option"></button>
+        <button style="font-family: ComicRelif-Reg;" class="option"></button>
+        <button style="font-family: ComicRelif-Reg;" class="option"></button>
+        <button style="font-family: ComicRelif-Reg;" class="option"></button>
+
+        <div class="nav-btns">
+            <button id="previous">Previous</button>
+            <p id="que-counter"></p>
+            <button id="next">Next</button>
+        </div>
+
+        <p id="result"></p>
+        <button class="none back-btn" id="backbtn"><a style="text-decoration: none;color:black" href="index.html">Back
+                to Dashboard</a></button>
+    </section>
+
+
+
+
+
+    <script type="module" src="./js/QuizLogic.js"></script>
+</body>
+
+</html>
+
+<!-- ================= PARTICLE JS (UI ONLY) ================= -->
+<script>
+    const canvas = document.getElementById("space");
+    const ctx = canvas.getContext("2d");
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resize();
+    window.onresize = resize;
+
+    const particles = Array.from({ length: 120 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2 + 1,
+        s: Math.random() * 0.6 + 0.2
+    }));
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+            p.y -= p.s;
+            if (p.y < 0) p.y = canvas.height;
+            ctx.beginPath();
+            ctx.fillStyle = "rgba(255,200,120,0.8)";
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fill();
+        });
+        requestAnimationFrame(animate);
+    }
+    animate();
+</script>
