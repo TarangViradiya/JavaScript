@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>QuizEra | Login</title>
+    <link rel="icon" href="images/Logo-white.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        @font-face {
+            font-family: 'ComicRelif-Bold';
+            src: url(fonts/Comic_Relief/ComicRelief-Bold.ttf);
+        }
+
+        @font-face {
+            font-family: 'ComicRelif-Reg';
+            src: url(fonts/Comic_Relief/ComicRelief-Regular.ttf);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            font-family: 'Segoe UI', sans-serif;
+            background: #000;
+        }
+
+        /* THREE.JS CANVAS */
+        canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+        }
+
+        /* LOGIN CARD */
+        .login-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+
+            width: 360px;
+            padding: 35px;
+            border-radius: 22px;
+
+            background: linear-gradient(145deg, #ffffff10, #ffffff20);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+            color: #fff;
+            text-align: center;
+        }
+
+        /* WAVE TEXT */
+        .wave-text {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin-bottom: 10px;
+            font-family: ComicRelif-Bold;
+            font-size: 34px;
+        }
+
+        .wave-text span {
+            display: inline-block;
+            animation: wave 1.6s infinite ease-in-out;
+        }
+
+        .wave-text span:nth-child(1) { animation-delay: 0s; }
+        .wave-text span:nth-child(2) { animation-delay: 0.1s; }
+        .wave-text span:nth-child(3) { animation-delay: 0.2s; }
+        .wave-text span:nth-child(4) { animation-delay: 0.3s; }
+        .wave-text span:nth-child(5) { animation-delay: 0.4s; }
+        .wave-text span:nth-child(6) { animation-delay: 0.5s; }
+        .wave-text span:nth-child(7) { animation-delay: 0.6s; }
+        .wave-text span:nth-child(8) { animation-delay: 0.7s; }
+
+        @keyframes wave {
+            0%, 100% {
+                transform: translateY(0);
+                color: #ffd369;
+            }
+            50% {
+                transform: translateY(-10px);
+                color: #ffb703;
+            }
+        }
+
+        .login-box p {
+            font-family: ComicRelif-Reg;
+            font-size: 15px;
+            margin-bottom: 30px;
+            color: #ddd;
+        }
+
+        .input-box {
+            margin-bottom: 18px;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 12px;
+            border: none;
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        .input-box input::placeholder {
+            color: #ccc;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+
+            background: linear-gradient(135deg, #ffd369, #ffb703);
+            color: #000;
+            transition: 0.3s;
+        }
+
+        .login-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 30px rgba(255, 211, 105, 0.5);
+        }
+
+        .extra {
+            margin-top: 18px;
+            font-size: 14px;
+        }
+
+        .extra a {
+            color: #ffd369;
+            text-decoration: none;
+        }
+
+        .extra a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 420px) {
+            .login-box {
+                width: 90%;
+            }
+
+            .wave-text {
+                font-size: 26px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- LOGIN UI -->
+    <div class="login-box">
+
+        <div class="wave-text">
+            <span>Q</span><span>u</span><span>i</span><span>z</span>
+            <span>E</span><span>r</span><span>a</span><span>🔐</span>
+        </div>
+
+        <p>Login to continue your quiz journey</p>
+
+        <div class="input-box">
+            <input type="text" placeholder="Username" id="uname">
+        </div>
+
+        <div class="input-box">
+            <input type="password" placeholder="Password" id="pwd">
+        </div>
+
+        <button class="login-btn" onclick="login()">Login</button>
+
+        <div class="extra">
+            <p>Don't have an account ? <a href="#">Register</a></p>
+        </div>
+    </div>
+
+    <!-- LOGIN LOGIC -->
+    <script>
+        function login() {
+            let uname = document.getElementById('uname');
+            let pwd = document.getElementById('pwd');
+
+            const user = { username: "Admin", password: "1212" };
+
+            if (!uname.value) {
+                alert("Please enter Username");
+                uname.focus();
+                return;
+            }
+
+            if (uname.value !== user.username) {
+                alert("Invalid User");
+                return;
+            }
+
+            if (!pwd.value) {
+                alert("Please enter Password");
+                pwd.focus();
+                return;
+            }
+
+            if (pwd.value !== user.password) {
+                alert("Invalid Password");
+                return;
+            }
+
+            alert("Login Successful 🚀");
+            window.location.href = "index.html";
+        }
+    </script>
+
+    <!-- THREE.JS -->
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+
+    <script>
+        let scene = new THREE.Scene();
+        let camera = new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
+        );
+
+        let renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        document.body.appendChild(renderer.domElement);
+
+        camera.position.z = 5;
+
+        // STAR FIELD
+        const starGeometry = new THREE.BufferGeometry();
+        const starCount = 1500;
+        const positions = [];
+
+        for (let i = 0; i < starCount; i++) {
+            positions.push(
+                (Math.random() - 0.5) * 600,
+                (Math.random() - 0.5) * 600,
+                -Math.random() * 600
+            );
+        }
+
+        starGeometry.setAttribute(
+            'position',
+            new THREE.Float32BufferAttribute(positions, 3)
+        );
+
+        const starMaterial = new THREE.PointsMaterial({
+            color: 0xffffff,
+            size: 1.2
+        });
+
+        const starField = new THREE.Points(starGeometry, starMaterial);
+        scene.add(starField);
+
+        const ambient = new THREE.AmbientLight(0xffffff, 0.8);
+        scene.add(ambient);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            starField.rotation.y += 0.0004;
+            starField.rotation.x += 0.0002;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener("resize", () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+
+</body>
+</html>
